@@ -22,14 +22,16 @@
         display: flex;
         height: 3rem;
         box-sizing: border-box;
-        backdrop-filter: blur(10px);
+        <!-- backdrop-filter: blur(10px); -->
       }
+
       #input {
         border: none;
         padding: 0 1rem;
         flex-grow: 1;
         margin: 0.25rem;
       }
+
       #input:focus {
         outline: none;
       }
@@ -59,7 +61,9 @@
   <body>
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>送信</button>
+      <label for="input">メッセージ:</label>
+      <input id="input" autocomplete="off" />
+      <button type="submit">送信</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
