@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>realtime chat application</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        margin: 0.25rem;
+      }
+
+      #input:focus {
+        outline: none;
+      }
+      .chat-message {
+        display: flex;
+        flex-direction: row-reverse;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="messages"></ul>
+    <form id="form" action="">
+      <label for="input">"メッセージ: "</label>
+      <input id="input" autocomplete="off" />
+      <button type="submit">[ Send ]</button>
+    </form>
+    <script>
+      let socket = io.connect();
+
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const messages = document.getElementsByClassName("messages")[0];
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value) {
+          const msg_socketId = socket.id;
+          window.alert(msg_socketId);
+          window.alert(socket.id);
+          window.alert(input.value);
+          socket.emit("chat message", input.value, socket.id);
+          input.value = "";
+        }
+      });
+
+      socket.on("client message", (msg, msg_socketId) => {
+        let indent = "left";
+        const chatMessage = document.createElement("li");
+        if (msg_socketId === socket.id) {
+          indent = "right";
+          chatMessage.classList.add("chat-message");
+        }
+        let item = document.createElement("li");
+        item.classList.add(indent);
+        let span = document.createElement("span");
+        span.textContent = msg;
+        item.appendChild(span);
+        messages.appendChild(item);
+        messages.appendChild(chatMessage);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>
